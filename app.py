@@ -23,6 +23,17 @@ def load_data():
     except Exception as e:
         print(f"Error loading data: {e}")
         return None
+
+data = load_data()
+
+if data is not None and isinstance(data, pd.DataFrame):
+    if 'verified_reviews' in data.columns:
+        all_reviews_text = ' '.join(data['verified_reviews'].astype(str))
+        st.sidebar.write(f"Number of reviews: {len(data)}")
+    else:
+        st.sidebar.write("Column 'verified_reviews' not found in the dataset.")
+else:
+    st.sidebar.write("Failed to load data or data is not a DataFrame.")
 	    
 # Sentiment Analysis Function
 def analyze_sentiment(text):
