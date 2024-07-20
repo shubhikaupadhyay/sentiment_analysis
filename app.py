@@ -18,11 +18,12 @@ st.set_page_config(page_title = "Visentify",
 def load_data():
     try:
         data = pd.read_csv('amazon_alexa.tsv', sep='\t')
+        print(data.head())  # For debugging: print the first few rows
         return data
     except Exception as e:
         print(f"Error loading data: {e}")
         return None
-
+	    
 # Sentiment Analysis Function
 def analyze_sentiment(text):
     blob = TextBlob(text)
