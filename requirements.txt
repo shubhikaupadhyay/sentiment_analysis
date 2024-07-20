@@ -2,3 +2,4 @@ matplotlib
 wordcloud
 transformers
 plotly
+textblob
