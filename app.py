@@ -26,15 +26,50 @@ def load_data():
 
 data = load_data()
 
-if data is not None and isinstance(data, pd.DataFrame):
+if data is None:
+    st.sidebar.write("Data failed to load.")
+elif not isinstance(data, pd.DataFrame):
+    st.sidebar.write("Data is not a DataFrame.")
+else:
+    # Print DataFrame info and columns for debugging
+    st.sidebar.write("DataFrame Info:")
+    st.sidebar.write(data.info())
+    st.sidebar.write("Columns:")
+    st.sidebar.write(data.columns.tolist())
+    
+    # Check if the column exists
     if 'verified_reviews' in data.columns:
-        all_reviews_text = ' '.join(data['verified_reviews'].astype(str))
-        st.sidebar.write(f"Number of reviews: {len(data)}")
+        try:
+            # Convert all reviews to string to handle possible non-string values
+            all_reviews_text = ' '.join(data['verified_reviews'].astype(str))
+            st.sidebar.write(f"Number of reviews: {len(data)}")
+        except Exception as e:
+            st.sidebar.write(f"Error processing 'verified_reviews': {e}")
     else:
         st.sidebar.write("Column 'verified_reviews' not found in the dataset.")
-else:
-    st.sidebar.write("Failed to load data or data is not a DataFrame.")
+
+if 'verified_reviews' in data.columns:
+    try:
+        # Fill NaN values with empty strings and then join
+        all_reviews_text = ' '.join(data['verified_reviews'].fillna('').astype(str))
+        st.sidebar.write(f"Number of reviews: {len(data)}")
+    except Exception as e:
+        st.sidebar.write(f"Error processing 'verified_reviews': {e}")
 	    
+if 'verified_reviews' in data.columns:
+    try:
+        # Ensure the column is treated as a Series of strings
+        if data['verified_reviews'].dtype != 'object':
+            data['verified_reviews'] = data['verified_reviews'].astype(str)
+        all_reviews_text = ' '.join(data['verified_reviews'])
+        st.sidebar.write(f"Number of reviews: {len(data)}")
+    except Exception as e:
+        st.sidebar.write(f"Error processing 'verified_reviews': {e}")
+
+if 'verified_reviews' in data.columns:
+    st.sidebar.write("Sample Data:")
+    st.sidebar.write(data['verified_reviews'].head())
+ 
 # Sentiment Analysis Function
 def analyze_sentiment(text):
     blob = TextBlob(text)
