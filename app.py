@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
-from transformers import BartTokenizer, BartForConditionalGeneration
+# from transformers import BartTokenizer, BartForConditionalGeneration
 import plotly.graph_objects as go
 from textblob import TextBlob
 import plotly.express as px
@@ -16,8 +16,12 @@ st.set_page_config(page_title = "Visentify",
 # Load the data
 @st.cache_data
 def load_data():
-    data = pd.read_csv('amazon_alexa.tsv', sep='\t')
-    return data
+    try:
+        data = pd.read_csv('amazon_alexa.tsv', sep='\t')
+        return data
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return None
 
 # Sentiment Analysis Function
 def analyze_sentiment(text):
